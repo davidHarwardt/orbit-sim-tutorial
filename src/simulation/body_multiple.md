@@ -56,7 +56,7 @@ lateUpdate() {
 ```
 ```typescript
 // in `draw` in `main.ts`
-// nach der update Schleife
+// for ...
 for(let i = 0; i < bodies.length; i++) {
     bodies[i].lateUpdate();
 }

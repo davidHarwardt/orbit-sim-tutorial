@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+<html lang="de" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Erzeugen der Canvas - Gravitationssimulation in Typescript</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../sum.html">Zusammenfassung Typescript</a></li><li class="chapter-item expanded affix "><li class="part-title">Simulation</li><li class="chapter-item expanded "><a href="../simulation/setup.html"><strong aria-hidden="true">1.</strong> Setup</a></li><li class="chapter-item expanded "><a href="../simulation/canvas_init.html" class="active"><strong aria-hidden="true">2.</strong> Erzeugen der Canvas</a></li><li class="chapter-item expanded "><a href="../simulation/body_struct.html"><strong aria-hidden="true">3.</strong> Struktur des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_impl.html"><strong aria-hidden="true">4.</strong> Implementation des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_multiple.html"><strong aria-hidden="true">5.</strong> Simulation von mehreren Körpern</a></li><li class="chapter-item expanded affix "><li class="part-title">Erweiterungen</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/body_static_color.html">Statische Körper</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/setup_manual.html">Manuelle installation (optional)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Gravitationssimulation in Typescript</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="erzeugen-der-canvas"><a class="header" href="#erzeugen-der-canvas">Erzeugen der Canvas</a></h1>
+<h2 id="code-zum-erzeugen-der-canvas"><a class="header" href="#code-zum-erzeugen-der-canvas">Code zum Erzeugen der Canvas</a></h2>
+<p>Die Canvas wird wie folgt erzeugt und direkt der Seite (<code>document.body</code>) hinzugefügt:</p>
+<pre><code class="language-typescript">let canvas = Canvas2d.fromParent(document.body);
+canvas.addPlugin(new CanvasFullscreenPlugin());
+// Platz für weitere Plugins
+// ...
+// -------------------------
+canvas.init();
+</code></pre>
+<p>Außerdem wird der Canvas ein <code>CanvasFullscreenPlugin</code> hinzugefügt, damit sie den vollen Raum des Browserfensters ausfüllt.
+Nachdem alle Plugins hinzugefügt wurden, wird die Canvas mit <code>init</code> initialisiert.</p>
+<p>Anschließend muss ein <code>DrawLoop</code> erzeugt und gestartet werden, welcher die <code>draw</code> Funktion zyklisch aufruft (ca. 60 mal pro Sekunde).</p>
+<pre><code class="language-typescript">let loop = new DrawLoop(draw);
+loop.start();
+</code></pre>
+<h2 id="das-koordinatensystem"><a class="header" href="#das-koordinatensystem">Das Koordinatensystem</a></h2>
+<p>Im Gegensatz zu herkömmlichen Koordinatensystemen ist die Y-Achse der verwendeten Canvas invertiert
+und der Ursprung (also [0, 0]) liegt in der oberen, linken Ecke.</p>
+<pre><code>Die Koordinatensystem sieht also wie folgt aus:
+
+    |(0, 0)                             (w, 0)
+   -+--------------------------------------&gt; x
+    |
+    | (100, 100)
+    |      x---------+
+    |      |         |
+    |      |         |
+    |      +---------+
+    |
+    |              (300, 300)
+    |                   x
+  y |
+    V
+ (0, h)
+</code></pre>
+<h2 id="zeichnen-von-simplen-formen"><a class="header" href="#zeichnen-von-simplen-formen">Zeichnen von simplen Formen</a></h2>
+<p>Um Formen auf der Canvas zu zeichnen, muss dies in der <code>draw</code> Funktion stattfinden.
+Damit die Canvas jeden Frame neu gezeichnet wird, muss zuerst die <code>clear</code> Methode der <code>canvas</code> aufgerufen werden,
+gefolgt von <code>canvas.beginDraw();</code>.
+Der Frame wird mit einem Aufruf von <code>canvas.endDraw();</code> beendet.</p>
+<p>Die gesamte <code>draw</code> Funktion sollte wie folgt aussehen:</p>
+<pre><code class="language-typescript">function draw() {
+    canvas.clear();
+    canvas.beginDraw();
+
+    // alle Zeichenfunktionen werden hier aufgerufen
+    // ...
+    // ---------------------------------------------
+
+    canvas.endDraw();
+}
+</code></pre>
+<p>Formen können nun mit den <code>drawXXX</code> Methoden der <code>canvas</code> gezeichnet werden.
+Die Methoden benötigen Argumente, um die Form zu beschreiben (z.B. Kreis: Mittelpunkt und Radius).
+Außerdem akzeptieren die Methoden ein letztes Argument um visuelle Eigenschaften der Form zu ändern
+die Formen besitzen allerdings bereits Standardwerte für ihr Aussehen.</p>
+<div class="table-wrapper"><table><thead><tr><th>Form</th><th>Methode</th><th>Argumente</th><th>Style-Argumente</th></tr></thead><tbody>
+<tr><td>Kreis</td><td><code>drawCircle</code></td><td><code>center: Vec2, radius: number</code></td><td><code>color: Color, ...</code></td></tr>
+<tr><td>Rechteck</td><td><code>drawRect</code></td><td><code>pos: Vec2, dim: Vec2</code></td><td><code>color: Color, ...</code></td></tr>
+<tr><td>Linie</td><td><code>drawLine</code></td><td><code>start: Vec2, end: Vec2</code></td><td><code>width: number, color: Color, ...</code></td></tr>
+<tr><td>Text</td><td><code>drawText</code></td><td><code>text: string, pos: Vec2</code></td><td><code>size: number, color: Color, ...</code></td></tr>
+</tbody></table>
+</div>
+<p>Punkte und Vektoren lassen sich mit einem <code>Vec2</code> beschreiben, welcher mit <code>new Vec2(&lt;x&gt;, &lt;y&gt;)</code> konstruiert werden kann.</p>
+<p>Ein Kreis unter den Koordinaten (100, 100) mit einem Radius von 50 lässt sich also wie folgt zeichnen:</p>
+<pre><code class="language-typescript">// innerhalb der `draw` Funktion
+canvas.drawCircle(new Vec2(100, 100), 50);
+</code></pre>
+<pre><code class="language-typescript">// weitere Formen
+
+// ein Rechteck mit einer Größe von 100x100 an der Position (100, 300)
+canvas.drawRect(new Vec2(100, 300), new Vec2(100, 100));
+
+// eine Linie von (100, 500) nach (200, 600)
+canvas.drawLine(new Vec2(100, 500), new Vec2(200, 600));
+
+// der Text &quot;Hallo!&quot; mit einer Schriftgröße von 25 unter (300, 100)
+canvas.drawText(&quot;Hallo!&quot;, new Vec2(300, 100), { size: 25 });
+</code></pre>
+<p>Teste die Zeichenfunktionen am besten aus, um ein Gefühl für das Koordinatensystem zu bekommen.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../simulation/setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../simulation/body_struct.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../simulation/setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../simulation/body_struct.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

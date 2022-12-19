@@ -1,0 +1,700 @@
+<!DOCTYPE HTML>
+<html lang="de" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Gravitationssimulation in Typescript</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="sum.html">Zusammenfassung Typescript</a></li><li class="chapter-item expanded affix "><li class="part-title">Simulation</li><li class="chapter-item expanded "><a href="simulation/setup.html"><strong aria-hidden="true">1.</strong> Setup</a></li><li class="chapter-item expanded "><a href="simulation/canvas_init.html"><strong aria-hidden="true">2.</strong> Erzeugen der Canvas</a></li><li class="chapter-item expanded "><a href="simulation/body_struct.html"><strong aria-hidden="true">3.</strong> Struktur des Körpers</a></li><li class="chapter-item expanded "><a href="simulation/body_impl.html"><strong aria-hidden="true">4.</strong> Implementation des Körpers</a></li><li class="chapter-item expanded "><a href="simulation/body_multiple.html"><strong aria-hidden="true">5.</strong> Simulation von mehreren Körpern</a></li><li class="chapter-item expanded affix "><li class="part-title">Erweiterungen</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="simulation/body_static_color.html">Statische Körper</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="simulation/setup_manual.html">Manuelle installation (optional)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Gravitationssimulation in Typescript</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="zusammenfassung-typescript"><a class="header" href="#zusammenfassung-typescript">Zusammenfassung Typescript</a></h1>
+<p>Typescript ist eine Sprache, welche von Microsoft entwickelt wurde, um die Arbeit mit Javascript zu vereinfachen und Javascript um Datentypenannotationen erweitert.
+Die Sprache wird, um sie für Browser verständlich zu machen, in Javascript umgewandelt.</p>
+<h2 id="grundlegende-konzepte-und-syntax"><a class="header" href="#grundlegende-konzepte-und-syntax">Grundlegende Konzepte und Syntax</a></h2>
+<h3 id="1-variablen"><a class="header" href="#1-variablen">1. Variablen</a></h3>
+<p>Ähnlich zur Mathematik lässt sich einer Variablen ein Wert zuweisen.
+Variablen können verschiedene Arten von Werten darstellen, diese Arten von Variablen werden <strong>Typen</strong> genannt.
+Javascript stellt bereits eingebaute Typen zur Verfügung. Einige der wichtigsten Typen sind in der folgenden Tabelle aufgelistet.</p>
+<div class="table-wrapper"><table><thead><tr><th>Typ</th><th>Beschreibung</th></tr></thead><tbody>
+<tr><td><code>string</code></td><td>beliebiger Text</td></tr>
+<tr><td><code>number</code></td><td>Dezimalzahl</td></tr>
+<tr><td><code>boolean</code></td><td>Wahrheitswert <code>true</code> oder <code>false</code></td></tr>
+</tbody></table>
+</div>
+<pre><code class="language-typescript">// Variablen werden in Typescript meistens mit `let` und einem Namen deklariert:
+let name: string = &quot;Hans&quot;;
+let wohnort: string = &quot;Deutschland&quot;;
+let alter: number = 25;
+let abiturschnitt: number = 2.8;
+
+// der Typ der Variablen kann in den meisten Fällen von der Sprache bestimmt werden
+// und muss nicht angegeben werden
+let verheiratet = false; // type: boolean
+
+// nachdem eine Variable mit let deklariert wurde, kann ihr ein neuer Wert mit
+// &lt;name&gt; = &lt;wert&gt; zugewiesen werden
+alter = 26;
+// da Befehle in Javascript und vielen anderen Sprachen
+// von oben nach unten ausgeführt werden, beträgt der Wert der Variablen
+// `alter` ab der Deklaration in der ersten Zeile `25`
+// und ab dem Zuweisen des neuen Alters `26`
+</code></pre>
+<pre><code class="language-typescript">// Variablen können, wie in der Mathematik, in Rechenoperationen verwendet werden
+// in Javascript werden für die grundlegenden Operationen
+// die Zeichen `+`, `-`, `*`, `/` verwendet:
+let jahreErwachsen = alter - 18; // =&gt; 7
+let restlicheLebenserwartung = 78.5 - alter; // =&gt; 53.5
+
+// zu den Rechenoperationen können Werte verglichen werden
+// für die Vergleiche können folgende Operatoren genutzt werden
+//    `&gt;`:   ist größer als
+//    `&lt;`:   ist kleiner als
+//    `&gt;=`:  ist größer oder gleich
+//    `&lt;=`:  ist kleiner oder gleich
+//    `===`: ist gleich
+//    `!==`: ist ungleich
+// diese Vergleiche liefern einen `boolean`, je nachdem ob die Aussage
+// wahr (true) oder falsch (false) ist
+let kannMedizinStudieren = abiturschnitt &lt; 1.2; // =&gt; false
+
+// strings können ebenfalls verglichen werden, allerdings nur
+// mit `===` und `!==`
+let heisstPeter = name === &quot;Peter&quot;; // =&gt; false
+
+// um mehrere Kriterien zu überprüfen, können
+//     `a &amp;&amp; b` als a und b treffen zu
+// und `a || b` als a oder b treffen zu verwendet werden
+let darfAlkoholKaufen = (wohnort === &quot;Deutschland&quot; &amp;&amp; alter &gt;= 16)
+                     || (wohnort === &quot;Amerika&quot;     &amp;&amp; alter &gt;= 21); // =&gt; true
+
+// tldr: Variablen können Werte besitzen
+//       und in Rechnungen und Vergleichen verwendet werden
+</code></pre>
+<h3 id="2-kommentare"><a class="header" href="#2-kommentare">2. Kommentare</a></h3>
+<p>Kommentare erlauben es, dem Code Zusatzinformationen anzufügen, die das Geschriebene erklären, allerdings nicht ausgeführt werden.
+Kommentare beginnen mit <code>//</code> und nehmen den Rest einer Zeile ein</p>
+<pre><code class="language-javascript">// das ist ein Kommentar
+
+let test = 123; // das ist auch ein Kommentar
+</code></pre>
+<h3 id="3-funktionen"><a class="header" href="#3-funktionen">3. Funktionen</a></h3>
+<p>Funktionen können, wie in der Mathematik, Parameter annehmen und einen Wert produzieren.
+Eine Javascript Funktion wird wie der restliche Code von oben nach unten ausgeführt.
+Funktionen werden in Javascript mit <code>function</code> und einem Namen deklariert.
+Die Eingabetypen der Funktion müssen im Gegesatz zu Variablentypen angegeben werden.</p>
+<pre><code class="language-typescript">// Eine Funktion mit dem Namen `f` welche eine Zahl quadriert
+function f(x: number): number {
+    // `return` bestimmt den Rückgabewert der Funktion
+    // und bricht die Ausführung der Funktion ab
+    return x * x;
+    console.log(&quot;das hier wird niemals ausgeführt&quot;);
+}
+
+// eine Funktion kann, wie in der Mathematik,
+// mit &lt;name&gt;(...&lt;argumente&gt;) aufgerufen werden
+let a = f(2); // =&gt; 4
+</code></pre>
+<p>Javascript selbst bietet auch eingebaute Funktionen. Einige davon sind im Folgenden aufgelistet.</p>
+<pre><code class="language-typescript">// gibt `Hallo!` und die Zahl 123 auf die Browserkonsole aus
+console.log(&quot;Hallo!&quot;, 123);
+
+// liefert die Wurzel aus der Eingabezahl
+let laenge = Math.sqrt(3*3 + 4*4); // =&gt; 5
+// Math beinhaltet auch weitere mathematische Funktionen wie sin, cos, ...
+</code></pre>
+<h3 id="4-konditionale-ausführung-if--else"><a class="header" href="#4-konditionale-ausführung-if--else">4. Konditionale Ausführung (If / Else)</a></h3>
+<p>Mithilfe von <code>if</code> und <code>else</code> Blöcken kann je nach dem, welche Bedingungen zutreffen,
+unterschiedlicher Code ausgeführt werden.</p>
+<pre><code class="language-typescript">let uhrzeitStunden = 13;
+
+if(uhrzeitStunden &gt; 12) {
+    // da `uhrzeitStunden &gt; 12` zutrifft, wird diese Zeile ausgeführt
+    console.log(&quot;nachmittag&quot;);
+} else {
+    // diese Zeile wird übersprungen
+    console.log(&quot;vormittag&quot;);
+}
+</code></pre>
+<h3 id="5-wiederholte-ausführung-schleifen"><a class="header" href="#5-wiederholte-ausführung-schleifen">5. Wiederholte Ausführung (Schleifen)</a></h3>
+<p><code>while</code> und <code>for</code> Schleifen erlauben es, in Javascript Code variabel oft
+zu wiederholen ohne diesen mehrfach schreiben zu müssen.</p>
+<pre><code class="language-typescript">// `while` Schleife
+// =&gt; prüft vor jedem Durchlauf, ob der Ausdruck in den Klammern === true ist
+// diese Schleife wird unendlich lange ausgeführt
+while(true) {
+    console.log(&quot;Hallo!&quot;);
+}
+
+// `for` Schleife
+//  =&gt; startet mit i = 0 (let i = 0) 
+//     prüft vor jedem Durchlauf, ob i &lt; 10 ist (i &lt; 10)
+//     erhöht i bei jedem Durchlauf um 1 (i++ kurz für i = i + 1)
+for(let i = 0; i &lt; 10; i++) {
+    console.log(&quot;Hallo! - &quot; + i);
+}
+</code></pre>
+<h3 id="6-listen-arrays"><a class="header" href="#6-listen-arrays">6. Listen (Arrays)</a></h3>
+<p>Listen können beliebig viele Elemente von einem Typen enthalten.</p>
+<pre><code class="language-typescript">let rucksackInhalt = [&quot;Powerbank&quot;, &quot;Laptop&quot;, &quot;Flammenwerfer&quot;]; // type: string[]
+
+// ein Element kann aus einer Liste extrahiert werden,
+// indem in eckigen Klammern der Index eines Elements angegeben wird;
+// ! der index einer Liste startet bei 0 !
+let ersterGegenstand = rucksackInhalt[0]; // =&gt; &quot;Powerbank&quot;
+// Elemente einer Liste können auch modifiziert werden
+rucksackInhalt[1] = &quot;Tablet&quot;;
+// rucksackInhalt =&gt; [&quot;Powerbank&quot;, &quot;Tablet&quot;, &quot;Flammenwerfer&quot;]
+
+// die Methode `push` fügt dem Array ein Element `Ladekabel` am Ende hinzu
+rucksackInhalt.push(&quot;Ladekabel&quot;);
+// rucksackInhalt =&gt; [&quot;Powerbank&quot;, &quot;Laptop&quot;, &quot;Flammenwerfer&quot;, &quot;Ladekabel&quot;]
+
+// mit einer `for` Schleife können alle Elemente einer Liste durchlaufen werden
+for(let i = 0; i &lt; rucksackInhalt.length; i++) {
+    console.log((i + 1) + &quot;. Gegenstand: &quot; + rucksackInhalt[i]);
+}
+</code></pre>
+<h3 id="7-klassen"><a class="header" href="#7-klassen">7. Klassen</a></h3>
+<p>Eine Klasse kombiniert Daten mit Funktionalität.</p>
+<pre><code class="language-typescript">// Klassen können mit `class` und einem Namen deklariert werden
+class Schueler {
+    // die &quot;Felder&quot; einer Klasse beschreiben die Daten
+    // die mit jedem Objekt verbunden sind
+    name: string;
+    geburtsjahr: number;
+    notendurchschnitt: number;
+    geschlecht: string;
+
+    // der Konstruktor ist eine besondere Methode welche die Daten
+    // eines Objekts der Klasse initialisiert
+    // ein Konstruktor wird mit `new` aufgerufen
+    constructor(
+        // der Konstruktor kann wie jede andere Methode Argumente akzeptieren
+        name: string, geburtsjahr: number,
+        notendurchschnitt: number, geschlecht: string,
+    ) {
+        this.name = name;
+        this.geburtsjahr = geburtsjahr;
+        this.notendurchschnitt = notendurchschnitt;
+        this.geschlecht = geschlecht;
+    }
+
+    // Methoden einer Klasse funktionieren ähnlich wie gewöhnliche Funktionen
+    // allerdings kann mit `this` auf das aktuelle Objekt
+    // und somit auf die Daten von diesem Objekt zugegriffen werden
+    getAlter(jahr: number): number {
+        return jahr - this.geburtsjahr;
+    }
+}
+
+// mit `new` wird ein neues Objekt vom Typ `Schueler` erzeugt
+// der Konstruktor erhält die Argumente in den Klammern
+let marie = new Schueler(&quot;Marie&quot;, 2005, 2.3, &quot;w&quot;);
+
+// auf dem konstruierten Objekt können Methoden
+// mit &lt;obj&gt;.&lt;methode&gt;() aufgerufen werden
+let alter = marie.getAlter(2022);
+
+// mit &lt;obj&gt;.&lt;feldname&gt; kann dazu direkt auf ein Feld
+// eines Objekts zugegriffen werden
+let name = marie.name;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="setup"><a class="header" href="#setup">Setup</a></h1>
+<h2 id="Öffnen-des-projekts"><a class="header" href="#Öffnen-des-projekts">Öffnen des Projekts</a></h2>
+<ol>
+<li>Kopiere und entpacke die zur Verfügung gestellte Zip-Datei</li>
+<li>Öffne den entpackten Ordner und führe <code>start.bat</code> mit einem Doppelklick aus</li>
+<li>Nun sollten sich ein Konsolenfenster und ein Fenster des Programms <code>Visual Studio Code</code> (VsCode) (im Falle einer Warnung siehe <sup class="footnote-reference"><a href="#1">1</a></sup>)
+<ul>
+<li>Das Konsolenfenster dient lediglich dem Anzeigen der Nachrichten des Webservers</li>
+<li>Visual Studio Code wird verwendet, um den Quelltext der Simulation zu bearbeiten</li>
+</ul>
+</li>
+<li>Öffne anschließend die Datei <code>main.ts</code> in VsCode, falls diese nicht bereits geöffnet ist
+<img src="simulation/../assets/open-file.png" alt="open-file" /></li>
+<li>Die Applikation lässt sich nun unter <a href="http://127.0.0.1:5173">http://127.0.0.1:5173</a> öffnen</li>
+</ol>
+<h2 id="grundstruktur-des-programms"><a class="header" href="#grundstruktur-des-programms">Grundstruktur des Programms</a></h2>
+<p>Der Inhalt von <code>main.ts</code> sollte wie folgt aussehen:</p>
+<pre><code class="language-typescript">// import des Layouts der Seite
+import &quot;./style.css&quot;;
+// import von allen benötigten Funktionen
+import { Vec2 } from &quot;@david.harwardt/math&quot;;
+import {
+    Canvas2d, CanvasFullscreenPlugin, DrawLoop,
+    CanvasDraggablePlugin, CanvasInputManagerPlugin,
+} from &quot;@david.harwardt/canvas-2d&quot;;
+
+// Code zum erzeugen der Canvas
+// ...
+// ----------------------------
+
+// Zeichenfunktion der Szene
+function draw() {
+
+}
+</code></pre>
+<hr />
+<p><sup class="footnote-reference"><a href="#1">1</a></sup>Es besteht die Möglichkeit, dass ein Antivirenprogramm aufgrund einer Prozesserstellung oder dem gestarteten Webserver warnt, da, um die Entwicklung so einfach wie möglich zu gestalten,
+einige Prozesse, u.a. ein temporärer, lokaler Webserver automatisch erzeugt werden.
+Diese Warnung kann ignoriert werden oder alle benötigten Programme manuell installiert werden (<a href="simulation/setup_manual.html">Anleitung manuelle installation</a>).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="erzeugen-der-canvas"><a class="header" href="#erzeugen-der-canvas">Erzeugen der Canvas</a></h1>
+<h2 id="code-zum-erzeugen-der-canvas"><a class="header" href="#code-zum-erzeugen-der-canvas">Code zum Erzeugen der Canvas</a></h2>
+<p>Die Canvas wird wie folgt erzeugt und direkt der Seite (<code>document.body</code>) hinzugefügt:</p>
+<pre><code class="language-typescript">let canvas = Canvas2d.fromParent(document.body);
+canvas.addPlugin(new CanvasFullscreenPlugin());
+// Platz für weitere Plugins
+// ...
+// -------------------------
+canvas.init();
+</code></pre>
+<p>Außerdem wird der Canvas ein <code>CanvasFullscreenPlugin</code> hinzugefügt, damit sie den vollen Raum des Browserfensters ausfüllt.
+Nachdem alle Plugins hinzugefügt wurden, wird die Canvas mit <code>init</code> initialisiert.</p>
+<p>Anschließend muss ein <code>DrawLoop</code> erzeugt und gestartet werden, welcher die <code>draw</code> Funktion zyklisch aufruft (ca. 60 mal pro Sekunde).</p>
+<pre><code class="language-typescript">let loop = new DrawLoop(draw);
+loop.start();
+</code></pre>
+<h2 id="das-koordinatensystem"><a class="header" href="#das-koordinatensystem">Das Koordinatensystem</a></h2>
+<p>Im Gegensatz zu herkömmlichen Koordinatensystemen ist die Y-Achse der verwendeten Canvas invertiert
+und der Ursprung (also [0, 0]) liegt in der oberen, linken Ecke.</p>
+<pre><code>Die Koordinatensystem sieht also wie folgt aus:
+
+    |(0, 0)                             (w, 0)
+   -+--------------------------------------&gt; x
+    |
+    | (100, 100)
+    |      x---------+
+    |      |         |
+    |      |         |
+    |      +---------+
+    |
+    |              (300, 300)
+    |                   x
+  y |
+    V
+ (0, h)
+</code></pre>
+<h2 id="zeichnen-von-simplen-formen"><a class="header" href="#zeichnen-von-simplen-formen">Zeichnen von simplen Formen</a></h2>
+<p>Um Formen auf der Canvas zu zeichnen, muss dies in der <code>draw</code> Funktion stattfinden.
+Damit die Canvas jeden Frame neu gezeichnet wird, muss zuerst die <code>clear</code> Methode der <code>canvas</code> aufgerufen werden,
+gefolgt von <code>canvas.beginDraw();</code>.
+Der Frame wird mit einem Aufruf von <code>canvas.endDraw();</code> beendet.</p>
+<p>Die gesamte <code>draw</code> Funktion sollte wie folgt aussehen:</p>
+<pre><code class="language-typescript">function draw() {
+    canvas.clear();
+    canvas.beginDraw();
+
+    // alle Zeichenfunktionen werden hier aufgerufen
+    // ...
+    // ---------------------------------------------
+
+    canvas.endDraw();
+}
+</code></pre>
+<p>Formen können nun mit den <code>drawXXX</code> Methoden der <code>canvas</code> gezeichnet werden.
+Die Methoden benötigen Argumente, um die Form zu beschreiben (z.B. Kreis: Mittelpunkt und Radius).
+Außerdem akzeptieren die Methoden ein letztes Argument um visuelle Eigenschaften der Form zu ändern
+die Formen besitzen allerdings bereits Standardwerte für ihr Aussehen.</p>
+<div class="table-wrapper"><table><thead><tr><th>Form</th><th>Methode</th><th>Argumente</th><th>Style-Argumente</th></tr></thead><tbody>
+<tr><td>Kreis</td><td><code>drawCircle</code></td><td><code>center: Vec2, radius: number</code></td><td><code>color: Color, ...</code></td></tr>
+<tr><td>Rechteck</td><td><code>drawRect</code></td><td><code>pos: Vec2, dim: Vec2</code></td><td><code>color: Color, ...</code></td></tr>
+<tr><td>Linie</td><td><code>drawLine</code></td><td><code>start: Vec2, end: Vec2</code></td><td><code>width: number, color: Color, ...</code></td></tr>
+<tr><td>Text</td><td><code>drawText</code></td><td><code>text: string, pos: Vec2</code></td><td><code>size: number, color: Color, ...</code></td></tr>
+</tbody></table>
+</div>
+<p>Punkte und Vektoren lassen sich mit einem <code>Vec2</code> beschreiben, welcher mit <code>new Vec2(&lt;x&gt;, &lt;y&gt;)</code> konstruiert werden kann.</p>
+<p>Ein Kreis unter den Koordinaten (100, 100) mit einem Radius von 50 lässt sich also wie folgt zeichnen:</p>
+<pre><code class="language-typescript">// innerhalb der `draw` Funktion
+canvas.drawCircle(new Vec2(100, 100), 50);
+</code></pre>
+<pre><code class="language-typescript">// weitere Formen
+
+// ein Rechteck mit einer Größe von 100x100 an der Position (100, 300)
+canvas.drawRect(new Vec2(100, 300), new Vec2(100, 100));
+
+// eine Linie von (100, 500) nach (200, 600)
+canvas.drawLine(new Vec2(100, 500), new Vec2(200, 600));
+
+// der Text &quot;Hallo!&quot; mit einer Schriftgröße von 25 unter (300, 100)
+canvas.drawText(&quot;Hallo!&quot;, new Vec2(300, 100), { size: 25 });
+</code></pre>
+<p>Teste die Zeichenfunktionen am besten aus, um ein Gefühl für das Koordinatensystem zu bekommen.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="struktur-des-körpers"><a class="header" href="#struktur-des-körpers">Struktur des Körpers</a></h1>
+<p>Um einen Körper simulieren zu können, benötigt dieser alle, für die Simulation wichtigen Daten.
+Eine <a href="simulation//sum.html#7-klassen">Klasse</a> (<code>class</code>) eignet sich, um diese Eigenschaften zu lagern.</p>
+<p>Die Klasse benötigt auch Methoden, welche den Körper zeichnen [<code>draw(canvas: Canvas2d)</code>]
+und die Position und Geschwindigkeit nach dem Newtonschen Gravitationsgesetz
+mit jeweils einem anderen Körper ändern [<code>update(body: GravBody)</code>].</p>
+<p>Eine weitere Methode sollte die <code>update</code> Methode für alle Körper in der Simulation ausführen [<code>updateAll(bodies: GravBody[])</code>].</p>
+<p>Beispielklasse:</p>
+<pre><code class="language-typescript">class GravBody {
+    pos: Vec2;      // kurz für `position`
+    vel: Vec2;      // kurz für `velocity`
+    mass: number;
+
+    constructor(pos: Vec2, vel: Vec2, mass: number) {
+        this.pos = pos;
+        this.vel = vel;
+        this.mass = mass;
+    }
+
+    draw(canvas: Canvas2d) {
+        // todo: Körper zeichnen
+    }
+
+    update(body: GravBody) {
+        // todo: einzelnen Körper simulieren
+    }
+
+    updateAll(bodies: GravBody[]) {
+        // todo: update für alle Körper (außer dem eigenen) aufrufen
+    }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="implementation-des-körpers"><a class="header" href="#implementation-des-körpers">Implementation des Körpers</a></h1>
+<h2 id="grundlegendes-prinzip"><a class="header" href="#grundlegendes-prinzip">Grundlegendes Prinzip</a></h2>
+<p>Da die Geschwindigkeit \(v\) eines Körpers die Änderung in seiner Position \(p\) beschreibt
+und dasselbe für die Beschleunigung \(a\) und \(v\) gilt (\(a\) beschreibt die Änderungsrate von \(v\)),
+wird in der Simulation jeden Frame in der <code>update</code> Methode eine Beschleunigung auf die Geschwindigkeit des Körpers addiert,
+die Geschwindigkeit wiederum wird auf die Position addiert:</p>
+<pre><code class="language-typescript">// in der `GravBody` Klasse
+update(body: GravBody) {
+    // vorerst keine Beschleunigung
+    let acc = /* ? */ new Vec2(0, 0);
+
+    // in Javascript lassen sich nur Zahlen (number) mit dem `+` Operator addieren
+    // daher verwenden Vektoren eine `add` Methode wie hier dargestellt
+    // die restlichen Operationen können mit `sub`, `mult`, `div` verwendet werden
+    this.vel = this.vel.add(acc);
+    this.pos = this.pos.add(this.vel);
+}
+// ...
+</code></pre>
+<h2 id="zeichnen-des-körpers"><a class="header" href="#zeichnen-des-körpers">Zeichnen des Körpers</a></h2>
+<p>Um den Körper anzeigen zu können, wird er in der <code>draw</code> Methode gezeichnet.
+Für die Darstellung kann eine beliebige Form gewählt werden, allerdings entspricht ein Kreis den zu simulierenden Objekten am ehesten:</p>
+<pre><code class="language-typescript">// in der `GravBody` Klasse
+draw(canvas: Canvas2d) {
+    // grobe Abschätzung des Radius anhand der Masse
+    let radius = Math.sqrt(this.mass);
+    canvas.drawCircle(this.pos, radius);
+}
+</code></pre>
+<h2 id="darstellen-der-körper"><a class="header" href="#darstellen-der-körper">Darstellen der Körper</a></h2>
+<p>Mit dem grundlegenden Gerüst lassen sich die Körper bereits auf dem Bildschirm anzeigen und können sich <em>gleichförmig</em> bewegen.
+Um beispielhaft 2 Körper in der Simulation zu verwenden, kann die Simulation um das Folgende erweitert werden:</p>
+<pre><code class="language-typescript">// direkt in `main.ts`
+// unter Code zum Erzeugen der Canvas
+let sun = new GravBody(new Vec2(500, 500), new Vec2(0, 0), 1000);
+let earth = new GravBody(new Vec2(500, 300), new Vec2(1, 0), 20);
+
+function draw() {
+    // ...canvas.beginDraw();
+    earth.update(sonne);
+
+    earth.draw(canvas);
+    sun.draw(canvas);
+    canvas.endDraw();
+    // ... canvas.endDraw();
+}
+</code></pre>
+<p>Wenn die Datei nun gespeichert wird, sollten ein großer und ein kleinerer Kreis, welcher sich nach rechts bewegt, auf dem Bildschirm zu erkennen sein.
+Der kleine Kreis bewegt sich noch geradeaus, da sein Geschwindigkeitsvektor gleich bleibt und nach rechts zeigt.</p>
+<h2 id="implementation-des-gravitationsgesetzes"><a class="header" href="#implementation-des-gravitationsgesetzes">Implementation des Gravitationsgesetzes</a></h2>
+<p>Um die Position und Geschwindigkeit des Körpers simulieren zu können, muss also vorerst die, aus der Kraft resultierende Beschleunigung,
+unter Verwendung der folgenden Formeln berechnet werden.
+(die Formeln müssen nach \(a\) umgestellt werden und \(G = \gamma\))</p>
+<p>\[ F = G \frac{m_1 m_2}{r^2} \]
+\[ F = m \cdot a \]</p>
+<details>
+<summary>Lösung</summary>
+<p>\[ F = m_1 \cdot a \]
+Teilen durch \(m\)</p>
+<p>\[ a = \frac{F}{m_1} \]
+Einsetzen von \(F\)</p>
+<p>\[ a = \frac{G \frac{m_1 m_2}{r^2}}{m_1} \]
+Kürzen</p>
+<p>\[ a = G \frac{m_1 m_2}{m_1 r^2} \]
+\[ \underline{\underline{a = G \frac{m_2}{r^2}}} \]</p>
+</details>
+<p>Die Gleichung kann wie folgt in Javascript implementiert werden:</p>
+<pre><code class="language-typescript">update(body: GravBody) {
+    // Gravitationskonstante (fiktiver Wert)
+    let G = 1;
+    // Berechnen der Entfernung zwischen den Körpern
+    let r = this.pos.distance(body.pos);
+
+    // Richtung der Beschleunigung
+    // (Vektor, welcher in Richtung des anderen Körpers zeigt)
+    // 
+    // +--------------------&gt;
+    // |  this    other
+    // |    x------&gt;x
+    // |       dir
+    // |       
+    // V
+    let dir = body.pos.sub(this.pos);
+
+    // Betrag der Beschleunigung (ohne Richtung)
+    let absAcc = G * (body.mass / (r*r));
+    // kombinieren von Richtung und Betrag der Beschleunigung
+    let acc = dir.withLength(absAcc);
+
+    this.vel = this.vel.add(acc);
+    this.pos = this.pos.add(this.vel);
+}
+</code></pre>
+<p>Wenn die Gleichung korrekt implementiert wurde, sollte die Erde in der Simulation um die Sonne kreisen.</p>
+<p>Alle weitern Schritte dienen der Erweiterung der, nun fertigen, Grundsimulation</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="simulation-von-mehreren-körpern"><a class="header" href="#simulation-von-mehreren-körpern">Simulation von mehreren Körpern</a></h1>
+<p>Um mehrere Körper simulieren zu können benötigen wir eine Liste (Array) aus Körpern.
+Das bedeutet wir wandeln die seperaten Deklarationen von <code>sun</code> und <code>earth</code> in eine Liste <code>bodies</code> um.</p>
+<pre><code class="language-typescript">// let sun = new GravBody(new Vec2(500, 500), new Vec2(0, 0), 1000);
+// let earth = new GravBody(new Vec2(500, 300), new Vec2(1, 0), 20);
+
+// umgewandelt zu =&gt;
+
+let bodies = [
+    new GravBody(new Vec2(500, 500), new Vec2(0, 0), 1000), // sun
+    new GravBody(new Vec2(500, 300), new Vec2(1, 0), 20),   // earth
+];
+</code></pre>
+<p>In diese Liste können nun beliebig viele weitere Körper hinzugefügt werden.</p>
+<p>Damit nun alle Körper der Liste geupdated werden muss die Liste in der <code>draw</code> Funktion
+mit einer <code>for</code> Schleife durchlaufen werden. Das Durchlaufen ersetzt die einzelnen <code>draw</code> und <code>update</code> Aufrufe.</p>
+<pre><code class="language-typescript">// innerhalb der `draw` Funktion
+// ...canvas.beginDraw();
+for(let i = 0; i &lt; bodies.length; i++) {
+    bodies[i].draw(canvas);
+    bodies[i].updateAll(bodies);
+}
+// ...canvas.endDraw();
+</code></pre>
+<p>Zuletzt muss noch die <code>updateAll</code> Methode der <code>GravBody</code> Klasse implementiert werden:</p>
+<pre><code class="language-typescript">updateAll(bodies: GravBody[]) {
+    // durchlaufen aller Körper
+    for(let i = 0; i &lt; bodies.length; i++) {
+        // Check ob anderer Körper unterschiedlich ist
+        if(bodies[i] !== this) {
+            // Aufruf der eigenen `update` mit dem anderen Körper
+            this.update(bodies[i]);
+        }
+    }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="statische-körper"><a class="header" href="#statische-körper">Statische Körper</a></h1>
+<p>Der Zentralkörper soll in den Meisten Fällen das Zentrum des Systems bleiben,
+da die Simulation allerdings auf alle Körper angewannd wird sind Kleine Bewegungen
+nicht zu vermeiden.
+Um dieses Problem zu lösen kann dem Körper eine Eigenschaft <code>static</code> zugewiesen werden
+welche die Krafteinwirkungen auf den eigenen Körper vollständig deaktiviert.
+Dies kann wie folgt umgesetzt werden:</p>
+<pre><code class="language-typescript">class GravBody {
+    // weiteres Feld der Klasse `GravBody`:
+    isStatic: boolean;
+
+    // Ergänzung des Konstruktors:
+    constructor(/* Argumente */, isStatic: boolean = false) {
+        this.isStatic = isStatic;
+        // restlicher Konstruktor
+    }
+
+    update(body: GravBody) {
+        // Abbruch der Aimulation falls der Körper statisch ist
+        if(this.isStatic) { return; }
+        
+        // ... Rest der `update` Methode
+    }
+}
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="manuelle-installation-optional"><a class="header" href="#manuelle-installation-optional">Manuelle installation (optional)</a></h1>
+<ol>
+<li>Gehe auf <a href="https://nodejs.org">https://nodejs.org</a> und lade den Installer für <code>Node.js</code> herunter</li>
+<li>Gehe auf <a href="https://code.visualstudio.com">https://code.visualstudio.com</a> und lade den Installer für <code>Visual Studio Code</code> herunter</li>
+<li>Installiere die heruntergeladenen Programme</li>
+<li>Nun muss nur noch <code>Visual Studio Code</code> und der <code>project</code> Ordner aus der Zip-Datei in <code>Visual Studio Code</code> geöffnet werden</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </body>
+</html>

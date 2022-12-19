@@ -1,0 +1,382 @@
+<!DOCTYPE HTML>
+<html lang="de" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Zusammenfassung Typescript - Gravitationssimulation in Typescript</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="sum.html" class="active">Zusammenfassung Typescript</a></li><li class="chapter-item expanded affix "><li class="part-title">Simulation</li><li class="chapter-item expanded "><a href="simulation/setup.html"><strong aria-hidden="true">1.</strong> Setup</a></li><li class="chapter-item expanded "><a href="simulation/canvas_init.html"><strong aria-hidden="true">2.</strong> Erzeugen der Canvas</a></li><li class="chapter-item expanded "><a href="simulation/body_struct.html"><strong aria-hidden="true">3.</strong> Struktur des Körpers</a></li><li class="chapter-item expanded "><a href="simulation/body_impl.html"><strong aria-hidden="true">4.</strong> Implementation des Körpers</a></li><li class="chapter-item expanded "><a href="simulation/body_multiple.html"><strong aria-hidden="true">5.</strong> Simulation von mehreren Körpern</a></li><li class="chapter-item expanded affix "><li class="part-title">Erweiterungen</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="simulation/body_static_color.html">Statische Körper</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="simulation/setup_manual.html">Manuelle installation (optional)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Gravitationssimulation in Typescript</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="zusammenfassung-typescript"><a class="header" href="#zusammenfassung-typescript">Zusammenfassung Typescript</a></h1>
+<p>Typescript ist eine Sprache, welche von Microsoft entwickelt wurde, um die Arbeit mit Javascript zu vereinfachen und Javascript um Datentypenannotationen erweitert.
+Die Sprache wird, um sie für Browser verständlich zu machen, in Javascript umgewandelt.</p>
+<h2 id="grundlegende-konzepte-und-syntax"><a class="header" href="#grundlegende-konzepte-und-syntax">Grundlegende Konzepte und Syntax</a></h2>
+<h3 id="1-variablen"><a class="header" href="#1-variablen">1. Variablen</a></h3>
+<p>Ähnlich zur Mathematik lässt sich einer Variablen ein Wert zuweisen.
+Variablen können verschiedene Arten von Werten darstellen, diese Arten von Variablen werden <strong>Typen</strong> genannt.
+Javascript stellt bereits eingebaute Typen zur Verfügung. Einige der wichtigsten Typen sind in der folgenden Tabelle aufgelistet.</p>
+<div class="table-wrapper"><table><thead><tr><th>Typ</th><th>Beschreibung</th></tr></thead><tbody>
+<tr><td><code>string</code></td><td>beliebiger Text</td></tr>
+<tr><td><code>number</code></td><td>Dezimalzahl</td></tr>
+<tr><td><code>boolean</code></td><td>Wahrheitswert <code>true</code> oder <code>false</code></td></tr>
+</tbody></table>
+</div>
+<pre><code class="language-typescript">// Variablen werden in Typescript meistens mit `let` und einem Namen deklariert:
+let name: string = &quot;Hans&quot;;
+let wohnort: string = &quot;Deutschland&quot;;
+let alter: number = 25;
+let abiturschnitt: number = 2.8;
+
+// der Typ der Variablen kann in den meisten Fällen von der Sprache bestimmt werden
+// und muss nicht angegeben werden
+let verheiratet = false; // type: boolean
+
+// nachdem eine Variable mit let deklariert wurde, kann ihr ein neuer Wert mit
+// &lt;name&gt; = &lt;wert&gt; zugewiesen werden
+alter = 26;
+// da Befehle in Javascript und vielen anderen Sprachen
+// von oben nach unten ausgeführt werden, beträgt der Wert der Variablen
+// `alter` ab der Deklaration in der ersten Zeile `25`
+// und ab dem Zuweisen des neuen Alters `26`
+</code></pre>
+<pre><code class="language-typescript">// Variablen können, wie in der Mathematik, in Rechenoperationen verwendet werden
+// in Javascript werden für die grundlegenden Operationen
+// die Zeichen `+`, `-`, `*`, `/` verwendet:
+let jahreErwachsen = alter - 18; // =&gt; 7
+let restlicheLebenserwartung = 78.5 - alter; // =&gt; 53.5
+
+// zu den Rechenoperationen können Werte verglichen werden
+// für die Vergleiche können folgende Operatoren genutzt werden
+//    `&gt;`:   ist größer als
+//    `&lt;`:   ist kleiner als
+//    `&gt;=`:  ist größer oder gleich
+//    `&lt;=`:  ist kleiner oder gleich
+//    `===`: ist gleich
+//    `!==`: ist ungleich
+// diese Vergleiche liefern einen `boolean`, je nachdem ob die Aussage
+// wahr (true) oder falsch (false) ist
+let kannMedizinStudieren = abiturschnitt &lt; 1.2; // =&gt; false
+
+// strings können ebenfalls verglichen werden, allerdings nur
+// mit `===` und `!==`
+let heisstPeter = name === &quot;Peter&quot;; // =&gt; false
+
+// um mehrere Kriterien zu überprüfen, können
+//     `a &amp;&amp; b` als a und b treffen zu
+// und `a || b` als a oder b treffen zu verwendet werden
+let darfAlkoholKaufen = (wohnort === &quot;Deutschland&quot; &amp;&amp; alter &gt;= 16)
+                     || (wohnort === &quot;Amerika&quot;     &amp;&amp; alter &gt;= 21); // =&gt; true
+
+// tldr: Variablen können Werte besitzen
+//       und in Rechnungen und Vergleichen verwendet werden
+</code></pre>
+<h3 id="2-kommentare"><a class="header" href="#2-kommentare">2. Kommentare</a></h3>
+<p>Kommentare erlauben es, dem Code Zusatzinformationen anzufügen, die das Geschriebene erklären, allerdings nicht ausgeführt werden.
+Kommentare beginnen mit <code>//</code> und nehmen den Rest einer Zeile ein</p>
+<pre><code class="language-javascript">// das ist ein Kommentar
+
+let test = 123; // das ist auch ein Kommentar
+</code></pre>
+<h3 id="3-funktionen"><a class="header" href="#3-funktionen">3. Funktionen</a></h3>
+<p>Funktionen können, wie in der Mathematik, Parameter annehmen und einen Wert produzieren.
+Eine Javascript Funktion wird wie der restliche Code von oben nach unten ausgeführt.
+Funktionen werden in Javascript mit <code>function</code> und einem Namen deklariert.
+Die Eingabetypen der Funktion müssen im Gegesatz zu Variablentypen angegeben werden.</p>
+<pre><code class="language-typescript">// Eine Funktion mit dem Namen `f` welche eine Zahl quadriert
+function f(x: number): number {
+    // `return` bestimmt den Rückgabewert der Funktion
+    // und bricht die Ausführung der Funktion ab
+    return x * x;
+    console.log(&quot;das hier wird niemals ausgeführt&quot;);
+}
+
+// eine Funktion kann, wie in der Mathematik,
+// mit &lt;name&gt;(...&lt;argumente&gt;) aufgerufen werden
+let a = f(2); // =&gt; 4
+</code></pre>
+<p>Javascript selbst bietet auch eingebaute Funktionen. Einige davon sind im Folgenden aufgelistet.</p>
+<pre><code class="language-typescript">// gibt `Hallo!` und die Zahl 123 auf die Browserkonsole aus
+console.log(&quot;Hallo!&quot;, 123);
+
+// liefert die Wurzel aus der Eingabezahl
+let laenge = Math.sqrt(3*3 + 4*4); // =&gt; 5
+// Math beinhaltet auch weitere mathematische Funktionen wie sin, cos, ...
+</code></pre>
+<h3 id="4-konditionale-ausführung-if--else"><a class="header" href="#4-konditionale-ausführung-if--else">4. Konditionale Ausführung (If / Else)</a></h3>
+<p>Mithilfe von <code>if</code> und <code>else</code> Blöcken kann je nach dem, welche Bedingungen zutreffen,
+unterschiedlicher Code ausgeführt werden.</p>
+<pre><code class="language-typescript">let uhrzeitStunden = 13;
+
+if(uhrzeitStunden &gt; 12) {
+    // da `uhrzeitStunden &gt; 12` zutrifft, wird diese Zeile ausgeführt
+    console.log(&quot;nachmittag&quot;);
+} else {
+    // diese Zeile wird übersprungen
+    console.log(&quot;vormittag&quot;);
+}
+</code></pre>
+<h3 id="5-wiederholte-ausführung-schleifen"><a class="header" href="#5-wiederholte-ausführung-schleifen">5. Wiederholte Ausführung (Schleifen)</a></h3>
+<p><code>while</code> und <code>for</code> Schleifen erlauben es, in Javascript Code variabel oft
+zu wiederholen ohne diesen mehrfach schreiben zu müssen.</p>
+<pre><code class="language-typescript">// `while` Schleife
+// =&gt; prüft vor jedem Durchlauf, ob der Ausdruck in den Klammern === true ist
+// diese Schleife wird unendlich lange ausgeführt
+while(true) {
+    console.log(&quot;Hallo!&quot;);
+}
+
+// `for` Schleife
+//  =&gt; startet mit i = 0 (let i = 0) 
+//     prüft vor jedem Durchlauf, ob i &lt; 10 ist (i &lt; 10)
+//     erhöht i bei jedem Durchlauf um 1 (i++ kurz für i = i + 1)
+for(let i = 0; i &lt; 10; i++) {
+    console.log(&quot;Hallo! - &quot; + i);
+}
+</code></pre>
+<h3 id="6-listen-arrays"><a class="header" href="#6-listen-arrays">6. Listen (Arrays)</a></h3>
+<p>Listen können beliebig viele Elemente von einem Typen enthalten.</p>
+<pre><code class="language-typescript">let rucksackInhalt = [&quot;Powerbank&quot;, &quot;Laptop&quot;, &quot;Flammenwerfer&quot;]; // type: string[]
+
+// ein Element kann aus einer Liste extrahiert werden,
+// indem in eckigen Klammern der Index eines Elements angegeben wird;
+// ! der index einer Liste startet bei 0 !
+let ersterGegenstand = rucksackInhalt[0]; // =&gt; &quot;Powerbank&quot;
+// Elemente einer Liste können auch modifiziert werden
+rucksackInhalt[1] = &quot;Tablet&quot;;
+// rucksackInhalt =&gt; [&quot;Powerbank&quot;, &quot;Tablet&quot;, &quot;Flammenwerfer&quot;]
+
+// die Methode `push` fügt dem Array ein Element `Ladekabel` am Ende hinzu
+rucksackInhalt.push(&quot;Ladekabel&quot;);
+// rucksackInhalt =&gt; [&quot;Powerbank&quot;, &quot;Laptop&quot;, &quot;Flammenwerfer&quot;, &quot;Ladekabel&quot;]
+
+// mit einer `for` Schleife können alle Elemente einer Liste durchlaufen werden
+for(let i = 0; i &lt; rucksackInhalt.length; i++) {
+    console.log((i + 1) + &quot;. Gegenstand: &quot; + rucksackInhalt[i]);
+}
+</code></pre>
+<h3 id="7-klassen"><a class="header" href="#7-klassen">7. Klassen</a></h3>
+<p>Eine Klasse kombiniert Daten mit Funktionalität.</p>
+<pre><code class="language-typescript">// Klassen können mit `class` und einem Namen deklariert werden
+class Schueler {
+    // die &quot;Felder&quot; einer Klasse beschreiben die Daten
+    // die mit jedem Objekt verbunden sind
+    name: string;
+    geburtsjahr: number;
+    notendurchschnitt: number;
+    geschlecht: string;
+
+    // der Konstruktor ist eine besondere Methode welche die Daten
+    // eines Objekts der Klasse initialisiert
+    // ein Konstruktor wird mit `new` aufgerufen
+    constructor(
+        // der Konstruktor kann wie jede andere Methode Argumente akzeptieren
+        name: string, geburtsjahr: number,
+        notendurchschnitt: number, geschlecht: string,
+    ) {
+        this.name = name;
+        this.geburtsjahr = geburtsjahr;
+        this.notendurchschnitt = notendurchschnitt;
+        this.geschlecht = geschlecht;
+    }
+
+    // Methoden einer Klasse funktionieren ähnlich wie gewöhnliche Funktionen
+    // allerdings kann mit `this` auf das aktuelle Objekt
+    // und somit auf die Daten von diesem Objekt zugegriffen werden
+    getAlter(jahr: number): number {
+        return jahr - this.geburtsjahr;
+    }
+}
+
+// mit `new` wird ein neues Objekt vom Typ `Schueler` erzeugt
+// der Konstruktor erhält die Argumente in den Klammern
+let marie = new Schueler(&quot;Marie&quot;, 2005, 2.3, &quot;w&quot;);
+
+// auf dem konstruierten Objekt können Methoden
+// mit &lt;obj&gt;.&lt;methode&gt;() aufgerufen werden
+let alter = marie.getAlter(2022);
+
+// mit &lt;obj&gt;.&lt;feldname&gt; kann dazu direkt auf ein Feld
+// eines Objekts zugegriffen werden
+let name = marie.name;
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next" href="simulation/setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next" href="simulation/setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

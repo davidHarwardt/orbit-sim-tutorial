@@ -1,0 +1,291 @@
+<!DOCTYPE HTML>
+<html lang="de" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Implementation des Körpers - Gravitationssimulation in Typescript</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../sum.html">Zusammenfassung Typescript</a></li><li class="chapter-item expanded affix "><li class="part-title">Simulation</li><li class="chapter-item expanded "><a href="../simulation/setup.html"><strong aria-hidden="true">1.</strong> Setup</a></li><li class="chapter-item expanded "><a href="../simulation/canvas_init.html"><strong aria-hidden="true">2.</strong> Erzeugen der Canvas</a></li><li class="chapter-item expanded "><a href="../simulation/body_struct.html"><strong aria-hidden="true">3.</strong> Struktur des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_impl.html" class="active"><strong aria-hidden="true">4.</strong> Implementation des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_multiple.html"><strong aria-hidden="true">5.</strong> Simulation von mehreren Körpern</a></li><li class="chapter-item expanded affix "><li class="part-title">Erweiterungen</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/body_static_color.html">Statische Körper</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/setup_manual.html">Manuelle installation (optional)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Gravitationssimulation in Typescript</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="implementation-des-körpers"><a class="header" href="#implementation-des-körpers">Implementation des Körpers</a></h1>
+<h2 id="grundlegendes-prinzip"><a class="header" href="#grundlegendes-prinzip">Grundlegendes Prinzip</a></h2>
+<p>Da die Geschwindigkeit \(v\) eines Körpers die Änderung in seiner Position \(p\) beschreibt
+und dasselbe für die Beschleunigung \(a\) und \(v\) gilt (\(a\) beschreibt die Änderungsrate von \(v\)),
+wird in der Simulation jeden Frame in der <code>update</code> Methode eine Beschleunigung auf die Geschwindigkeit des Körpers addiert,
+die Geschwindigkeit wiederum wird auf die Position addiert:</p>
+<pre><code class="language-typescript">// in der `GravBody` Klasse
+update(body: GravBody) {
+    // vorerst keine Beschleunigung
+    let acc = /* ? */ new Vec2(0, 0);
+
+    // in Javascript lassen sich nur Zahlen (number) mit dem `+` Operator addieren
+    // daher verwenden Vektoren eine `add` Methode wie hier dargestellt
+    // die restlichen Operationen können mit `sub`, `mult`, `div` verwendet werden
+    this.vel = this.vel.add(acc);
+    this.pos = this.pos.add(this.vel);
+}
+// ...
+</code></pre>
+<h2 id="zeichnen-des-körpers"><a class="header" href="#zeichnen-des-körpers">Zeichnen des Körpers</a></h2>
+<p>Um den Körper anzeigen zu können, wird er in der <code>draw</code> Methode gezeichnet.
+Für die Darstellung kann eine beliebige Form gewählt werden, allerdings entspricht ein Kreis den zu simulierenden Objekten am ehesten:</p>
+<pre><code class="language-typescript">// in der `GravBody` Klasse
+draw(canvas: Canvas2d) {
+    // grobe Abschätzung des Radius anhand der Masse
+    let radius = Math.sqrt(this.mass);
+    canvas.drawCircle(this.pos, radius);
+}
+</code></pre>
+<h2 id="darstellen-der-körper"><a class="header" href="#darstellen-der-körper">Darstellen der Körper</a></h2>
+<p>Mit dem grundlegenden Gerüst lassen sich die Körper bereits auf dem Bildschirm anzeigen und können sich <em>gleichförmig</em> bewegen.
+Um beispielhaft 2 Körper in der Simulation zu verwenden, kann die Simulation um das Folgende erweitert werden:</p>
+<pre><code class="language-typescript">// direkt in `main.ts`
+// unter Code zum Erzeugen der Canvas
+let sun = new GravBody(new Vec2(500, 500), new Vec2(0, 0), 1000);
+let earth = new GravBody(new Vec2(500, 300), new Vec2(1, 0), 20);
+
+function draw() {
+    // ...canvas.beginDraw();
+    earth.update(sonne);
+
+    earth.draw(canvas);
+    sun.draw(canvas);
+    canvas.endDraw();
+    // ... canvas.endDraw();
+}
+</code></pre>
+<p>Wenn die Datei nun gespeichert wird, sollten ein großer und ein kleinerer Kreis, welcher sich nach rechts bewegt, auf dem Bildschirm zu erkennen sein.
+Der kleine Kreis bewegt sich noch geradeaus, da sein Geschwindigkeitsvektor gleich bleibt und nach rechts zeigt.</p>
+<h2 id="implementation-des-gravitationsgesetzes"><a class="header" href="#implementation-des-gravitationsgesetzes">Implementation des Gravitationsgesetzes</a></h2>
+<p>Um die Position und Geschwindigkeit des Körpers simulieren zu können, muss also vorerst die, aus der Kraft resultierende Beschleunigung,
+unter Verwendung der folgenden Formeln berechnet werden.
+(die Formeln müssen nach \(a\) umgestellt werden und \(G = \gamma\))</p>
+<p>\[ F = G \frac{m_1 m_2}{r^2} \]
+\[ F = m \cdot a \]</p>
+<details>
+<summary>Lösung</summary>
+<p>\[ F = m_1 \cdot a \]
+Teilen durch \(m\)</p>
+<p>\[ a = \frac{F}{m_1} \]
+Einsetzen von \(F\)</p>
+<p>\[ a = \frac{G \frac{m_1 m_2}{r^2}}{m_1} \]
+Kürzen</p>
+<p>\[ a = G \frac{m_1 m_2}{m_1 r^2} \]
+\[ \underline{\underline{a = G \frac{m_2}{r^2}}} \]</p>
+</details>
+<p>Die Gleichung kann wie folgt in Javascript implementiert werden:</p>
+<pre><code class="language-typescript">update(body: GravBody) {
+    // Gravitationskonstante (fiktiver Wert)
+    let G = 1;
+    // Berechnen der Entfernung zwischen den Körpern
+    let r = this.pos.distance(body.pos);
+
+    // Richtung der Beschleunigung
+    // (Vektor, welcher in Richtung des anderen Körpers zeigt)
+    // 
+    // +--------------------&gt;
+    // |  this    other
+    // |    x------&gt;x
+    // |       dir
+    // |       
+    // V
+    let dir = body.pos.sub(this.pos);
+
+    // Betrag der Beschleunigung (ohne Richtung)
+    let absAcc = G * (body.mass / (r*r));
+    // kombinieren von Richtung und Betrag der Beschleunigung
+    let acc = dir.withLength(absAcc);
+
+    this.vel = this.vel.add(acc);
+    this.pos = this.pos.add(this.vel);
+}
+</code></pre>
+<p>Wenn die Gleichung korrekt implementiert wurde, sollte die Erde in der Simulation um die Sonne kreisen.</p>
+<p>Alle weitern Schritte dienen der Erweiterung der, nun fertigen, Grundsimulation</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../simulation/body_struct.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../simulation/body_multiple.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../simulation/body_struct.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../simulation/body_multiple.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

@@ -1,0 +1,10 @@
+[book]
+authors = ["David Harwardt"]
+language = "de"
+multilingual = false
+src = "src"
+title = "Gravitationssimulation in Typescript"
+
+[output.html]
+mathjax-support = true
+

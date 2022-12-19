@@ -40,4 +40,24 @@ updateAll(bodies: GravBody[]) {
     }
 }
 ```
+Da die Position eines Körpers in jedem Aufruf von `update` verändert wird, ist die Simulation nun aber weniger akkurat,
+dies kann korrigiert werden indem das updaten der Position erst audgeführt wird nachdem alle Geschwindigkeiten verändert wurden dies kann wie folgt implementiert werden.
+```typescript
+// in GravBody
+update(body: GravBody) {
+    // ...
+    // this.pos = this.pos.add(this.vel); entfernen
+}
 
+// neue methode
+lateUpdate() {
+    this.pos = this.pos.add(this.vel);
+}
+```
+```typescript
+// in `draw` in `main.ts`
+// nach der update Schleife
+for(let i = 0; i < bodies.length; i++) {
+    bodies[i].lateUpdate();
+}
+```

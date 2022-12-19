@@ -21,6 +21,8 @@ loop.start();
 
 > Der Code kann mit Ctrl-S gespeichert werden.
 
+> mit Ctrl / Cmd + Shift + i kann die Browserkonsole geöffnet werden welche später wichtig wird
+
 ## Das Koordinatensystem
 Im Gegensatz zu herkömmlichen Koordinatensystemen ist die Y-Achse der verwendeten Canvas invertiert
 und der Ursprung (also [0, 0]) liegt in der oberen, linken Ecke.

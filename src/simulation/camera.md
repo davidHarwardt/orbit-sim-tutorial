@@ -10,5 +10,5 @@ canvas.addPlugin(new CanvasDraggablePlugin());
 // restliche Plugins
 ```
 
-Nun sollte sich mit der Maus bewegen und mit dem Mausrad zoomen lassen.
+Nun sollte sich die Kamera mit der Maus bewegen und mit dem Mausrad zoomen lassen.
 

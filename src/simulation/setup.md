@@ -1,7 +1,7 @@
 # Setup
 
 ## Öffnen des Projekts
-1. Kopiere und entpacke die zur Verfügung gestellte Zip-Datei
+1. Kopiere und entpacke die zur Verfügung gestellte Zip-Datei in einen beliebigen Ordner (wichtig: der Ordnername sollte keine Leerzeichen enthalten)
 2. Öffne den entpackten Ordner und führe `start.bat` mit einem Doppelklick aus
 3. Nun sollten sich ein Konsolenfenster und ein Fenster des Programms `Visual Studio Code` (VsCode) (im Falle einer Warnung siehe [^1])
     - Das Konsolenfenster dient lediglich dem Anzeigen der Nachrichten des Webservers

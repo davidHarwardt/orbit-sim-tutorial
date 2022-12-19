@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Struktur des Körpers - Gravitationssimulation in Typescript</title>
+        <title>Kamerasteuerung (Zoom) - Gravitationssimulation in Typescript</title>
                 
 
         <!-- Custom HTML head -->
@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../sum.html">Zusammenfassung Typescript</a></li><li class="chapter-item expanded affix "><li class="part-title">Simulation</li><li class="chapter-item expanded "><a href="../simulation/setup.html"><strong aria-hidden="true">1.</strong> Setup</a></li><li class="chapter-item expanded "><a href="../simulation/canvas_init.html"><strong aria-hidden="true">2.</strong> Erzeugen der Canvas</a></li><li class="chapter-item expanded "><a href="../simulation/body_struct.html" class="active"><strong aria-hidden="true">3.</strong> Struktur des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_impl.html"><strong aria-hidden="true">4.</strong> Implementation des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_multiple.html"><strong aria-hidden="true">5.</strong> Simulation von mehreren Körpern</a></li><li class="chapter-item expanded affix "><li class="part-title">Erweiterungen</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/camera.html">Kamerasteuerung (Zoom)</a></li><li class="chapter-item expanded affix "><a href="../simulation/body_static_color.html">Statische Körper</a></li><li class="chapter-item expanded affix "><a href="../simulation/timescale.html">Zeitskalierung</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/setup_manual.html">Manuelle installation (optional)</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../sum.html">Zusammenfassung Typescript</a></li><li class="chapter-item expanded affix "><li class="part-title">Simulation</li><li class="chapter-item expanded "><a href="../simulation/setup.html"><strong aria-hidden="true">1.</strong> Setup</a></li><li class="chapter-item expanded "><a href="../simulation/canvas_init.html"><strong aria-hidden="true">2.</strong> Erzeugen der Canvas</a></li><li class="chapter-item expanded "><a href="../simulation/body_struct.html"><strong aria-hidden="true">3.</strong> Struktur des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_impl.html"><strong aria-hidden="true">4.</strong> Implementation des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_multiple.html"><strong aria-hidden="true">5.</strong> Simulation von mehreren Körpern</a></li><li class="chapter-item expanded affix "><li class="part-title">Erweiterungen</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/camera.html" class="active">Kamerasteuerung (Zoom)</a></li><li class="chapter-item expanded affix "><a href="../simulation/body_static_color.html">Statische Körper</a></li><li class="chapter-item expanded affix "><a href="../simulation/timescale.html">Zeitskalierung</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/setup_manual.html">Manuelle installation (optional)</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -145,48 +145,26 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="struktur-des-körpers"><a class="header" href="#struktur-des-körpers">Struktur des Körpers</a></h1>
-<p>Um einen Körper simulieren zu können, benötigt dieser alle, für die Simulation wichtigen Daten.
-Eine <a href="/sum.html#7-klassen">Klasse</a> (<code>class</code>) eignet sich, um diese Eigenschaften zu lagern.</p>
-<p>Die Klasse benötigt auch Methoden, welche den Körper zeichnen [<code>draw(canvas: Canvas2d)</code>]
-und die Position und Geschwindigkeit nach dem Newtonschen Gravitationsgesetz
-mit jeweils einem anderen Körper ändern [<code>update(body: GravBody)</code>].</p>
-<p>Eine weitere Methode sollte die <code>update</code> Methode für alle Körper in der Simulation ausführen [<code>updateAll(bodies: GravBody[])</code>].</p>
-<p>Beispielklasse:</p>
-<pre><code class="language-typescript">class GravBody {
-    pos: Vec2;      // kurz für `position`
-    vel: Vec2;      // kurz für `velocity`
-    mass: number;
-
-    constructor(pos: Vec2, vel: Vec2, mass: number) {
-        this.pos = pos;
-        this.vel = vel;
-        this.mass = mass;
-    }
-
-    draw(canvas: Canvas2d) {
-        // todo: Körper zeichnen
-    }
-
-    update(body: GravBody) {
-        // todo: einzelnen Körper simulieren
-    }
-
-    updateAll(bodies: GravBody[]) {
-        // todo: update für alle Körper (außer dem eigenen) aufrufen
-    }
-}
+                        <h1 id="kamerasteuerung-zoom"><a class="header" href="#kamerasteuerung-zoom">Kamerasteuerung (Zoom)</a></h1>
+<p>Um in größeren Simulationen einen besseren überblick behalten zu können empfiehlt sich die Fähigkeit,
+die Kamera bewegen und zoomen zu können.
+Dies lässt sich durch 2 Plugins der Kamera realisieren:</p>
+<pre><code class="language-typescript">// ... let canvas = 
+canvas.addPlugin(new CanvasInputManagerPlugin());
+canvas.addPlugin(new CanvasDraggablePlugin());
+// restliche Plugins
 </code></pre>
+<p>Nun sollte sich die Kamera mit der Maus bewegen und mit dem Mausrad zoomen lassen.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="../simulation/canvas_init.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="../simulation/body_multiple.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-                                                    <a rel="next" href="../simulation/body_impl.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                                    <a rel="next" href="../simulation/body_static_color.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -196,11 +174,11 @@ mit jeweils einem anderen Körper ändern [<code>update(body: GravBody)</code>].
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="../simulation/canvas_init.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="../simulation/body_multiple.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-                                    <a rel="next" href="../simulation/body_impl.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                    <a rel="next" href="../simulation/body_static_color.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                             </nav>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Struktur des Körpers - Gravitationssimulation in Typescript</title>
+        <title>Zeitskalierung - Gravitationssimulation in Typescript</title>
                 
 
         <!-- Custom HTML head -->
@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../sum.html">Zusammenfassung Typescript</a></li><li class="chapter-item expanded affix "><li class="part-title">Simulation</li><li class="chapter-item expanded "><a href="../simulation/setup.html"><strong aria-hidden="true">1.</strong> Setup</a></li><li class="chapter-item expanded "><a href="../simulation/canvas_init.html"><strong aria-hidden="true">2.</strong> Erzeugen der Canvas</a></li><li class="chapter-item expanded "><a href="../simulation/body_struct.html" class="active"><strong aria-hidden="true">3.</strong> Struktur des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_impl.html"><strong aria-hidden="true">4.</strong> Implementation des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_multiple.html"><strong aria-hidden="true">5.</strong> Simulation von mehreren Körpern</a></li><li class="chapter-item expanded affix "><li class="part-title">Erweiterungen</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/camera.html">Kamerasteuerung (Zoom)</a></li><li class="chapter-item expanded affix "><a href="../simulation/body_static_color.html">Statische Körper</a></li><li class="chapter-item expanded affix "><a href="../simulation/timescale.html">Zeitskalierung</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/setup_manual.html">Manuelle installation (optional)</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../sum.html">Zusammenfassung Typescript</a></li><li class="chapter-item expanded affix "><li class="part-title">Simulation</li><li class="chapter-item expanded "><a href="../simulation/setup.html"><strong aria-hidden="true">1.</strong> Setup</a></li><li class="chapter-item expanded "><a href="../simulation/canvas_init.html"><strong aria-hidden="true">2.</strong> Erzeugen der Canvas</a></li><li class="chapter-item expanded "><a href="../simulation/body_struct.html"><strong aria-hidden="true">3.</strong> Struktur des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_impl.html"><strong aria-hidden="true">4.</strong> Implementation des Körpers</a></li><li class="chapter-item expanded "><a href="../simulation/body_multiple.html"><strong aria-hidden="true">5.</strong> Simulation von mehreren Körpern</a></li><li class="chapter-item expanded affix "><li class="part-title">Erweiterungen</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/camera.html">Kamerasteuerung (Zoom)</a></li><li class="chapter-item expanded affix "><a href="../simulation/body_static_color.html">Statische Körper</a></li><li class="chapter-item expanded affix "><a href="../simulation/timescale.html" class="active">Zeitskalierung</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../simulation/setup_manual.html">Manuelle installation (optional)</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -145,48 +145,56 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="struktur-des-körpers"><a class="header" href="#struktur-des-körpers">Struktur des Körpers</a></h1>
-<p>Um einen Körper simulieren zu können, benötigt dieser alle, für die Simulation wichtigen Daten.
-Eine <a href="/sum.html#7-klassen">Klasse</a> (<code>class</code>) eignet sich, um diese Eigenschaften zu lagern.</p>
-<p>Die Klasse benötigt auch Methoden, welche den Körper zeichnen [<code>draw(canvas: Canvas2d)</code>]
-und die Position und Geschwindigkeit nach dem Newtonschen Gravitationsgesetz
-mit jeweils einem anderen Körper ändern [<code>update(body: GravBody)</code>].</p>
-<p>Eine weitere Methode sollte die <code>update</code> Methode für alle Körper in der Simulation ausführen [<code>updateAll(bodies: GravBody[])</code>].</p>
-<p>Beispielklasse:</p>
-<pre><code class="language-typescript">class GravBody {
-    pos: Vec2;      // kurz für `position`
-    vel: Vec2;      // kurz für `velocity`
-    mass: number;
+                        <h1 id="zeitskalierung"><a class="header" href="#zeitskalierung">Zeitskalierung</a></h1>
+<p>In der grundlegenden Implementation ist die Simulation an die Framerate (Bildwiederholungsrate, meistens 60fps) des Browsers gebunden,
+has heißt wenn sich die Framerate ändert wird die Simulation schneller oder langsamer.
+Um die Simulation von der Framerate unabhängig zu machen kann die gesamte Simulation um das Zeitdelta <code>dt</code> zwischen den Frames skaliert (multipliziert) werden.</p>
+<pre><code class="language-typescript">// in GravBody
 
-    constructor(pos: Vec2, vel: Vec2, mass: number) {
-        this.pos = pos;
-        this.vel = vel;
-        this.mass = mass;
-    }
+// die `update` Methoden erhalten ein zusätzliches Argument `dt`
+update(body: GravBody, dt: number) {
+    // ...berechnung `acc`
 
-    draw(canvas: Canvas2d) {
-        // todo: Körper zeichnen
-    }
+    // die Werte von `acc` und `vel` werden entsprechend der Zeit skaliert
+    // indem diese mit `dt` multipliziert werden
+    this.vel = this.vel.add(acc.multS(dt));
+    this.pos = this.pos.add(this.vel.multS(dt));
+}
 
-    update(body: GravBody) {
-        // todo: einzelnen Körper simulieren
-    }
+updateAll(bodies: GravBody[], dt: number) {
+    // for...
+        // `dt` wird an die einzelnen `update` Methoden weitergegeben
+        this.update(bodies[i], dt);
+    // ...
+}
+</code></pre>
+<pre><code class="language-typescript">// direkt in `main.ts` in der `draw` Funktion
 
-    updateAll(bodies: GravBody[]) {
-        // todo: update für alle Körper (außer dem eigenen) aufrufen
+// die `draw` Funktion erhält automatisch einen Wert für `dt`
+// (in Millisekunden) als ersten Parameter
+function draw(dt: number) {
+    // ...
+
+    // Umwandlung von `dt` in Sekunden
+    let dtSeconds = dt / 1000;
+    for(let i = 0; i &lt; bodies.length; i++) {
+        bodies[i].draw(canvas);
+        bodies[i].updateAll(bodies, dtSeconds);
     }
 }
 </code></pre>
+<p>Aufgrund der Skalierung kann die Bewegung der Körper langsamer oder schneller geworden sein.
+Die Geschwindigkeit (der Geschwindigkeitsvektor) der Körper kann angepasst werden falls dies der Fall ist.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="../simulation/canvas_init.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="../simulation/body_static_color.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-                                                    <a rel="next" href="../simulation/body_impl.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                                    <a rel="next" href="../simulation/setup_manual.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -196,11 +204,11 @@ mit jeweils einem anderen Körper ändern [<code>update(body: GravBody)</code>].
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="../simulation/canvas_init.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="../simulation/body_static_color.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-                                    <a rel="next" href="../simulation/body_impl.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                    <a rel="next" href="../simulation/setup_manual.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                             </nav>

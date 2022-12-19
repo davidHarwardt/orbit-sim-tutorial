@@ -12,8 +12,9 @@
 # Erweiterungen
 
 ---
+[Kamerasteuerung (Zoom)](simulation/camera.md)
 [Statische Körper](simulation/body_static_color.md)
-
+[Zeitskalierung](simulation/timescale.md)
 
 ---
 [Manuelle installation (optional)](simulation/setup_manual.md)

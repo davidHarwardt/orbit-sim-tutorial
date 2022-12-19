@@ -10,7 +10,7 @@ Das bedeutet wir wandeln die seperaten Deklarationen von `sun` und `earth` in ei
 
 let bodies = [
     new GravBody(new Vec2(500, 500), new Vec2(0, 0), 1000), // sun
-    new GravBody(new Vec2(500, 300), new Vec2(1, 0), 20),   // earth
+    new GravBody(new Vec2(500, 300), new Vec2(2, 0), 20),   // earth
 ];
 ```
 In diese Liste können nun beliebig viele weitere Körper hinzugefügt werden.

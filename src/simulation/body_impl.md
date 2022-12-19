@@ -40,7 +40,7 @@ Um beispielhaft 2 Körper in der Simulation zu verwenden, kann die Simulation um
 // direkt in `main.ts`
 // unter Code zum Erzeugen der Canvas
 let sun = new GravBody(new Vec2(500, 500), new Vec2(0, 0), 1000);
-let earth = new GravBody(new Vec2(500, 300), new Vec2(1, 0), 20);
+let earth = new GravBody(new Vec2(500, 300), new Vec2(2, 0), 20);
 
 function draw() {
     // ...canvas.beginDraw();
@@ -109,5 +109,74 @@ update(body: GravBody) {
 ```
 Wenn die Gleichung korrekt implementiert wurde, sollte die Erde in der Simulation um die Sonne kreisen.
 
-Alle weitern Schritte dienen der Erweiterung der, nun fertigen, Grundsimulation
+Der Code der soweit fertigen Grundsimulation könnte wie folgt aussehen:
+```typescript
+// import des Layouts der Seite
+import "./style.css";
+// import von allen benötigten Funktionen
+import { Vec2 } from "@david.harwardt/math";
+import {
+    Canvas2d, CanvasFullscreenPlugin, DrawLoop,
+    CanvasDraggablePlugin, CanvasInputManagerPlugin,
+} from "@david.harwardt/canvas-2d";
+
+let canvas = Canvas2d.fromParent(document.body);
+canvas.addPlugin(new CanvasFullscreenPlugin());
+
+canvas.init();
+
+let loop = new DrawLoop(draw);
+loop.start();
+
+class GravBody {
+    pos: Vec2;
+    vel: Vec2;
+    mass: number;
+
+    constructor(pos: Vec2, vel: Vec2, mass: number) {
+        this.pos = pos;
+        this.vel = vel;
+        this.mass = mass;
+    }
+
+    draw(canvas: Canvas2d) {
+        let radius = Math.sqrt(this.mass);
+        canvas.drawCircle(this.pos, radius);
+    }
+
+    update(body: GravBody) {
+        let G = 1;
+        let r = this.pos.distance(body.pos);
+        let dir = body.pos.sub(this.pos);
+
+        let absAcc = G * (body.mass / (r*r));
+        let acc = dir.withLength(absAcc);
+
+        this.vel = this.vel.add(acc);
+        this.pos = this.pos.add(this.vel);
+    }
+
+    updateAll(bodies: GravBody[]) {
+
+    }
+}
+
+let sun = new GravBody(new Vec2(500, 500), new Vec2(0, 0), 1000);
+let earth = new GravBody(new Vec2(500, 300), new Vec2(2, 0), 20);
+
+// Zeichenfunktion der Szene
+function draw() {
+    canvas.clear();
+    canvas.beginDraw();
+
+    earth.update(sun);
+
+    earth.draw(canvas);
+    sun.draw(canvas);
+
+
+    canvas.endDraw();
+}
+```
+Alle weitern Schritte dienen der Erweiterung der, nun fertigen, Grundsimulation.
 

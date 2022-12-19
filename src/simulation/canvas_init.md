@@ -19,6 +19,8 @@ let loop = new DrawLoop(draw);
 loop.start();
 ```
 
+> Der Code kann mit Ctrl-S gespeichert werden.
+
 ## Das Koordinatensystem
 Im Gegensatz zu herkömmlichen Koordinatensystemen ist die Y-Achse der verwendeten Canvas invertiert
 und der Ursprung (also [0, 0]) liegt in der oberen, linken Ecke.

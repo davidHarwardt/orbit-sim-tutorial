@@ -2,7 +2,7 @@
 Der Zentralkörper soll in den Meisten Fällen das Zentrum des Systems bleiben,
 da die Simulation allerdings auf alle Körper angewannd wird sind Kleine Bewegungen
 nicht zu vermeiden.
-Um dieses Problem zu lösen kann dem Körper eine Eigenschaft `static` zugewiesen werden
+Um dieses Problem zu lösen kann dem Körper eine Eigenschaft `isStatic` zugewiesen werden
 welche die Krafteinwirkungen auf den eigenen Körper vollständig deaktiviert.
 Dies kann wie folgt umgesetzt werden:
 ```typescript
@@ -17,7 +17,7 @@ class GravBody {
     }
 
     update(body: GravBody) {
-        // Abbruch der Aimulation falls der Körper statisch ist
+        // Abbruch der Simulation falls der Körper statisch ist
         if(this.isStatic) { return; }
         
         // ... Rest der `update` Methode

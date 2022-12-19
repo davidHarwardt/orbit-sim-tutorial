@@ -56,7 +56,10 @@ lateUpdate() {
 ```
 ```typescript
 // in `draw` in `main.ts`
-// for ...
+for(let i = 0; i < bodies.length; i++) {
+    bodies[i].draw(canvas);
+    bodies[i].update(bodies);
+}
 for(let i = 0; i < bodies.length; i++) {
     bodies[i].lateUpdate();
 }

@@ -48,7 +48,6 @@ function draw() {
 
     earth.draw(canvas);
     sun.draw(canvas);
-    canvas.endDraw();
     // ... canvas.endDraw();
 }
 ```
